@@ -126,4 +126,6 @@ public interface IMinigame {
 
     void moveToLobby(Player participant);
     void initConstructor();
+
+    void playerLeft(Player participant);
 }

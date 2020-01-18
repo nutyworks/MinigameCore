@@ -183,6 +183,9 @@ public abstract class AbstractMinigame implements IMinigame {
                 ChatColor.YELLOW + participants.size() + ChatColor.RED + "/" + ChatColor.YELLOW + maxPlayers
                 + ChatColor.RED + ")");
 
+        if (status.equals(MinigameStatus.STARTED))
+            playerLeft(participant);
+
         if (participants.size() < minPlayers && status.equals(MinigameStatus.READY)) {
             setStartLeftTime(Integer.MAX_VALUE, true);
             status = MinigameStatus.WAITING;
@@ -339,4 +342,6 @@ public abstract class AbstractMinigame implements IMinigame {
     abstract public void initialize(int id);
 
     abstract public void start();
+
+    abstract public void playerLeft(Player participant);
 }
