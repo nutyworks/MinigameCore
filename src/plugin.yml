@@ -1,0 +1,7 @@
+main: me.nuty.minigamecore.MinigameCore
+name: MinigameCore
+version: 0.0.1a
+api-version: '1.15'
+commands:
+  minigame:
+    aliases: [mg, game]
