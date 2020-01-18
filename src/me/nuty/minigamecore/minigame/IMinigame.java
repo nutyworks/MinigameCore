@@ -104,7 +104,6 @@ public interface IMinigame {
     /**
      * Ends the minigame and returns result of minigame.
      *
-     * @return gameResult
      */
     void destroy(boolean forced);
 
@@ -125,5 +124,6 @@ public interface IMinigame {
     int getId();
     void setId(int id);
 
-    public void moveToLobby(Player participant);
+    void moveToLobby(Player participant);
+    void initConstructor();
 }

@@ -2,12 +2,14 @@ package me.nuty.minigamecore.minigame;
 
 import me.nuty.minigamecore.MinigameCore;
 import me.nuty.minigamecore.arena.IArena;
+import me.nuty.minigamecore.scoreboard.MinigameScoreboardManager;
 import me.nuty.minigamecore.util.Constant;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.scoreboard.DisplaySlot;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,6 +29,7 @@ public abstract class AbstractMinigame implements IMinigame {
     private long startTime;
     private int startLeftTime;
     private BukkitTask bukkitTask;
+    private MinigameScoreboardManager pregameScoreboard;
 
     /**
      * {@link AbstractMinigame} is a abstract class to make a minigame easier.
@@ -47,12 +50,24 @@ public abstract class AbstractMinigame implements IMinigame {
         status = MinigameStatus.WAITING;
         result = new MinigameResult();
         startLeftTime = Integer.MAX_VALUE;
+    }
+
+    @Override
+    public void initConstructor() {
+        pregameScoreboard = new MinigameScoreboardManager(name, 4);
+        pregameScoreboard.setSlot(DisplaySlot.SIDEBAR);
+        pregameScoreboard.setText(1, ChatColor.GRAY + "ID: " + id);
+        pregameScoreboard.setText(3, "기다리는 중...");
 
         bukkitTask = new BukkitRunnable() {
             @Override
             public void run() {
-                if (status.equals(MinigameStatus.READY)) {
+                if (status.equals(MinigameStatus.WAITING)) {
+                    pregameScoreboard.setText(3, "기다리는 중...");
+                } else if (status.equals(MinigameStatus.READY)) {
                     startLeftTime--;
+
+                    pregameScoreboard.setText(3, ChatColor.AQUA + Integer.toString(startLeftTime) + ChatColor.YELLOW + "초 후 시작");
 
                     if (startLeftTime <= 5 && startLeftTime > 0) {
                         sendUniverseMessage(ChatColor.YELLOW + "게임이 " + ChatColor.AQUA + startLeftTime
@@ -126,6 +141,7 @@ public abstract class AbstractMinigame implements IMinigame {
         participant.setInvulnerable(false);
         participant.setAllowFlight(false);
         participant.setGameMode(GameMode.ADVENTURE);
+        participant.setScoreboard(pregameScoreboard.getScoreboard());
 
         this.participants.add(participant);
         this.join(participant);
@@ -183,6 +199,8 @@ public abstract class AbstractMinigame implements IMinigame {
         participant.setInvulnerable(true);
         participant.setAllowFlight(false);
         participant.setGameMode(GameMode.ADVENTURE);
+        participant.setScoreboard(MinigameCore.getInstance().getLobbyScoreboard().getScoreboard());
+
         for(Player target : participants) {
             target.showPlayer(MinigameCore.getInstance(), participant);
         }
