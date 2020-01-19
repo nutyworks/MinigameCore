@@ -96,4 +96,8 @@ public class Arena {
             path.delete();
         }
     }
+
+    public World getWorld() {
+        return world;
+    }
 }
