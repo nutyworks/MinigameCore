@@ -4,6 +4,7 @@ import me.nuty.minigamecore.command.MinigameCommand;
 import me.nuty.minigamecore.event.PlayerJoin;
 import me.nuty.minigamecore.event.PlayerMove;
 import me.nuty.minigamecore.event.PlayerQuit;
+import me.nuty.minigamecore.event.TabComplete;
 import me.nuty.minigamecore.minigame.IMinigame;
 import me.nuty.minigamecore.minigame.MinigameManager;
 import me.nuty.minigamecore.minigame.MinigameStatus;
@@ -70,6 +71,7 @@ public class MinigameCore extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new PlayerJoin(), instance);
         this.getServer().getPluginManager().registerEvents(new PlayerQuit(), instance);
         this.getServer().getPluginManager().registerEvents(new PlayerMove(), instance);
+        this.getServer().getPluginManager().registerEvents(new TabComplete(), instance);
 
         PluginCommand minigameCommand = this.getCommand("minigame");
         if (minigameCommand != null)
