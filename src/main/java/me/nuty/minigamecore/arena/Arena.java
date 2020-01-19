@@ -22,6 +22,8 @@ public class Arena {
         this.allowedArea = allowedArea;
         this.sourceFolder = sourceFolder;
         this.id = id;
+
+        create();
     }
 
     public Pair<Vector, Vector> getAllowedArea() {
@@ -32,7 +34,7 @@ public class Arena {
         this.allowedArea = allowedArea;
     }
 
-    public void create() {
+    private void create() {
 
         File targetFolder = new File(MinigameCore.getInstance().getDataFolder().getParentFile().getParentFile(), "mgw" + id);
 
