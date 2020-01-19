@@ -16,16 +16,9 @@ public class MinigameScoreboardManager {
     private int lines;
 
 
-    public MinigameScoreboardManager(String displayName, int lines) {
+    public MinigameScoreboardManager(String displayName) {
         this.sb = Objects.requireNonNull(MinigameCore.getInstance().getServer().getScoreboardManager()).getNewScoreboard();
         objective = sb.registerNewObjective("new scoreboard", "dummy", displayName);
-
-        if (lines > 16)
-            lines = 16;
-        else if (lines < 1)
-            lines = 1;
-
-        this.lines = lines;
 
         for (int i = 0; i < 16; i++) {
             Team team = sb.registerNewTeam(Integer.toString(i, 16));
@@ -35,6 +28,15 @@ public class MinigameScoreboardManager {
 
             team.addEntry(lineSeperator);
         }
+    }
+
+    public void setLines(int lines) {
+        if (lines > 16)
+            lines = 16;
+        else if (lines < 1)
+            lines = 1;
+
+        this.lines = lines;
 
         for (String entry : sb.getEntries()) {
             sb.resetScores(entry);

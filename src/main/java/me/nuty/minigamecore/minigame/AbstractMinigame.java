@@ -54,8 +54,9 @@ public abstract class AbstractMinigame implements IMinigame {
 
     @Override
     public void initConstructor() {
-        pregameScoreboard = new MinigameScoreboardManager(name, 4);
+        pregameScoreboard = new MinigameScoreboardManager(name);
         pregameScoreboard.setSlot(DisplaySlot.SIDEBAR);
+        pregameScoreboard.setLines(4);
         pregameScoreboard.setText(1, ChatColor.GRAY + "ID: " + id);
         pregameScoreboard.setText(3, "기다리는 중...");
 

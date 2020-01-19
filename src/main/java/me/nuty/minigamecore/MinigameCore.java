@@ -3,13 +3,20 @@ package me.nuty.minigamecore;
 import me.nuty.minigamecore.command.MinigameCommand;
 import me.nuty.minigamecore.event.PlayerJoin;
 import me.nuty.minigamecore.event.PlayerQuit;
+import me.nuty.minigamecore.minigame.IMinigame;
 import me.nuty.minigamecore.minigame.MinigameManager;
+import me.nuty.minigamecore.minigame.MinigameStatus;
 import me.nuty.minigamecore.player.PlayerManager;
 import me.nuty.minigamecore.scoreboard.MinigameScoreboardManager;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
+
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 public class MinigameCore extends JavaPlugin {
 
@@ -24,11 +31,39 @@ public class MinigameCore extends JavaPlugin {
         this.minigameManager = new MinigameManager();
         this.playerManager = new PlayerManager();
 
-        this.lobbyScoreboard = new MinigameScoreboardManager("Lobby scorebord test", 15);
-        lobbyScoreboard.setText(1, "Hello world");
-        lobbyScoreboard.setText(10, "this is line 10");
-        lobbyScoreboard.setText(7, ChatColor.AQUA  + "chatcolor test");
+        this.lobbyScoreboard = new MinigameScoreboardManager(ChatColor.YELLOW + "" + ChatColor.BOLD + "1fi.kro.kr");
         lobbyScoreboard.setSlot(DisplaySlot.SIDEBAR);
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                Map<Integer, IMinigame> listedMinigames = minigameManager.getListedMinigames();
+                lobbyScoreboard.setLines(5 + (listedMinigames.size() > 0 ? listedMinigames.size() - 1 : 0));
+                lobbyScoreboard.setText(2, ChatColor.GREEN + "/minigame join <id>");
+
+                int count = 0;
+                if (listedMinigames.size() == 0) {
+                    lobbyScoreboard.setText(4, ChatColor.RED + "열린 미니게임이 없음");
+                } else {
+                    for (int id : listedMinigames.keySet()) {
+                        if (count >= 11) break;
+                        IMinigame game = listedMinigames.get(id);
+                        String text = ChatColor.YELLOW + "" + ChatColor.BOLD + "" + id + ". "
+                                + ChatColor.AQUA + game.getName() + " "
+                                + ChatColor.GRAY + game.getParticipants().size() + "/"
+                                + game.getMaxPlayers() + " ";
+                        if(game.getStatus().equals(MinigameStatus.READY))
+                            text += ChatColor.YELLOW + "" + game.getStartLeftTime() + "s";
+                        else if(game.getStatus().equals(MinigameStatus.STARTED))
+                            text += ChatColor.YELLOW + "시작됨";
+                        else if(game.getStatus().equals(MinigameStatus.ENDED))
+                            text += ChatColor.YELLOW + "종료됨";
+                        lobbyScoreboard.setText(4 + count, text);
+                        count++;
+                    }
+                }
+            }
+        }.runTaskTimer(this, 0, 20L);
 
         this.getServer().getPluginManager().registerEvents(new PlayerJoin(), instance);
         this.getServer().getPluginManager().registerEvents(new PlayerQuit(), instance);
