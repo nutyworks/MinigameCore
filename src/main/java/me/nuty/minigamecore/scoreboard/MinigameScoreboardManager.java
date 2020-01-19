@@ -22,8 +22,8 @@ public class MinigameScoreboardManager {
         this.lines = 1;
 
         for (int i = 0; i < 16; i++) {
-            Team team = sb.registerNewTeam(Integer.toString(i, 16));
-            String lineSeperator = "§" + Integer.toString(i, 16) + "§r";
+            Team team = sb.registerNewTeam(Integer.toString(i, 15));
+            String lineSeperator = "§" + Integer.toString(i, 15) + "§r";
 
             scoreboardTexts.add(team);
 
@@ -32,8 +32,8 @@ public class MinigameScoreboardManager {
     }
 
     public void setLines(int lines) {
-        if (lines > 16)
-            lines = 16;
+        if (lines > 15)
+            lines = 15;
         else if (lines < 1)
             lines = 1;
 
