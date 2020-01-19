@@ -42,8 +42,8 @@ public class MinigameScoreboardManager {
             objective.getScore("§0§r").setScore(1);
         }
 
-        if (this.lines > lines) { // 기존보다 작으면 라인 제거 8, 6 -> remove 6 to 7
-            for(int i = lines - 1; i < this.lines - 1; i++) {
+        if (this.lines > lines) { // 기존보다 작으면 라인 제거 8, 6 -> remove 7 to 8
+            for(int i = lines; i < this.lines; i++) {
                 sb.resetScores("§" + Integer.toString(i, 16) + "§r");
             }
         } else if(this.lines < lines) { // 기존보다 크면 라인 추가 8, 6 -> add 7 to 8
