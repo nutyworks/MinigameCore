@@ -19,6 +19,7 @@ public class MinigameScoreboardManager {
     public MinigameScoreboardManager(String displayName) {
         this.sb = Objects.requireNonNull(MinigameCore.getInstance().getServer().getScoreboardManager()).getNewScoreboard();
         objective = sb.registerNewObjective("new scoreboard", "dummy", displayName);
+        this.lines = 1;
 
         for (int i = 0; i < 16; i++) {
             Team team = sb.registerNewTeam(Integer.toString(i, 16));
@@ -36,16 +37,22 @@ public class MinigameScoreboardManager {
         else if (lines < 1)
             lines = 1;
 
-        this.lines = lines;
-
-        for (String entry : sb.getEntries()) {
-            sb.resetScores(entry);
-        }
-
         for (int i = 0; i < lines; i++) {
             scoreboardTexts.get(i).setSuffix("");
-            objective.getScore("§" + Integer.toString(i, 16) + "§r").setScore(i + 1);
+            objective.getScore("§0§r").setScore(1);
         }
+
+        if (this.lines > lines) { // 기존보다 작으면 라인 제거 8, 6 -> remove 6 to 7
+            for(int i = lines - 1; i < this.lines - 1; i++) {
+                sb.resetScores("§" + Integer.toString(i, 16) + "§r");
+            }
+        } else if(this.lines < lines) { // 기존보다 크면 라인 추가 8, 6 -> add 7 to 8
+            for(int i = this.lines; i < lines; i++) {
+                objective.getScore("§" + Integer.toString(i, 16) + "§r").setScore(i + 1);
+            }
+        }
+
+        this.lines = lines;
     }
 
     public Scoreboard getScoreboard() {
