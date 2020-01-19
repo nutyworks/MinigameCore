@@ -11,6 +11,7 @@ import me.nuty.minigamecore.scoreboard.MinigameScoreboardManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -71,6 +72,10 @@ public class MinigameCore extends JavaPlugin {
         PluginCommand minigameCommand = this.getCommand("minigame");
         if (minigameCommand != null)
             minigameCommand.setExecutor(new MinigameCommand());
+
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.setScoreboard(lobbyScoreboard.getScoreboard());
+        }
 
         System.out.println("MinigameCore enabled");
     }
