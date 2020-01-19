@@ -2,6 +2,8 @@ package me.nuty.minigamecore.command;
 
 import me.nuty.minigamecore.MinigameCore;
 import me.nuty.minigamecore.minigame.IMinigame;
+import me.nuty.minigamecore.minigame.MinigameStatus;
+import org.bouncycastle.jcajce.provider.symmetric.ChaCha;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -25,12 +27,19 @@ public class MinigameJoinCommand extends AbstractSubCommand {
                     if (listed.containsKey(id)) { // 미니게임이 있으면
                         if (MinigameCore.getInstance().getPlayerManager() // 참여하고 있는 게임이 없으면
                                 .getParticipatedGameByPlayer((Player) sender) == -1) {
-                            sender.sendMessage(ChatColor.GREEN + "게임 대기열에 추가되었습니다.");
-                            listed.get(id).addParticipant((Player) sender); // 플레이어 추가
-                        } else {
+                            if(MinigameCore.getInstance().getMinigameManager().getListedMinigameByID(id).getStatus().equals(MinigameStatus.WAITING)
+                                || MinigameCore.getInstance().getMinigameManager().getListedMinigameByID(id).getStatus().equals(MinigameStatus.READY)) {
+                                if(MinigameCore.getInstance().getMinigameManager().getListedMinigameByID(id).getMaxPlayers()
+                                        > MinigameCore.getInstance().getMinigameManager().getListedMinigameByID(id).getParticipants().size()) {
+                                    sender.sendMessage(ChatColor.GREEN + "게임에 참여했습니다.");
+                                    listed.get(id).addParticipant((Player) sender); // 플레이어 추가
+                                } else
+                                    sender.sendMessage(ChatColor.RED + "인원이 가득 차서 게임에 참여할 수 없습니다.");
+                            } else
+                                sender.sendMessage(ChatColor.RED + "이미 시작한 게임입니다.");
+                        } else
                             sender.sendMessage(ChatColor.RED + "이미 다른 게임에 참여하고 있습니다. 나가려면 '/"
                                     + command.getName() + " leave'를 입력하세요.");
-                        }
                     } else
                         sender.sendMessage(ChatColor.RED + "존재하지 않는 미니게임 ID입니다.");
                 } else
