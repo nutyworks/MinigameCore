@@ -1,7 +1,7 @@
 package me.nuty.minigamecore.minigame;
 
 import me.nuty.minigamecore.MinigameCore;
-import me.nuty.minigamecore.arena.IArena;
+import me.nuty.minigamecore.arena.Arena;
 import me.nuty.minigamecore.scoreboard.MinigameScoreboardManager;
 import me.nuty.minigamecore.util.Constant;
 import org.bukkit.ChatColor;
@@ -23,7 +23,7 @@ public abstract class AbstractMinigame implements IMinigame {
     private int minPlayers;
     private List<Player> participants;
     private MinigameStatus status;
-    private IArena arena;
+    private Arena arena;
     private MinigameResult result;
     private int id;
     private long startTime;
@@ -277,12 +277,12 @@ public abstract class AbstractMinigame implements IMinigame {
     }
 
     @Override
-    public IArena getArena() {
+    public Arena getArena() {
         return arena;
     }
 
     @Override
-    public void setArena(IArena arena) {
+    public void setArena(Arena arena) {
         this.arena = arena;
     }
 

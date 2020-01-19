@@ -1,10 +1,9 @@
 package me.nuty.minigamecore.minigame;
 
-import me.nuty.minigamecore.arena.IArena;
+import me.nuty.minigamecore.arena.Arena;
 import org.bukkit.entity.Player;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface IMinigame {
 
@@ -63,9 +62,9 @@ public interface IMinigame {
      *
      * @return arena
      */
-    IArena getArena();
+    Arena getArena();
 
-    void setArena(IArena arena);
+    void setArena(Arena arena);
 
     /**
      * Returns the result of minigame.
